@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Tipos de Solicitação{% endblock %}
+{% block navbar_title %}Tipos de Solicitação{% endblock %}
+{% block content %}
+<h1 class="page-title">Tipos de Solicitação</h1>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3 style="margin-top:0">Novo tipo</h3>
+    <form method="post" class="form">
+      {{ form.hidden_tag() }}
+      <div class="form-row">{{ form.nome.label }} {{ form.nome() }}
+        {% for e in form.nome.errors %}<span class="error">{{ e }}</span>{% endfor %}</div>
+      <div class="form-row">{{ form.descricao.label }} {{ form.descricao() }}</div>
+      {{ form.submit(class="btn primary") }}
+    </form>
+  </div>
+  <div class="card" style="padding:0">
+    {% if itens %}
+    <table class="data">
+      <thead><tr><th>Nome</th><th>Descrição</th><th></th></tr></thead>
+      <tbody>
+      {% for t in itens %}
+        <tr>
+          <td>{{ t.nome }}</td>
+          <td class="muted">{{ t.descricao or '—' }}</td>
+          <td>
+            <form method="post" action="{{ url_for('admin.excluir_tipo', tid=t.id) }}"
+                  data-confirm="Excluir tipo {{ t.nome }}?" style="display:inline">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button class="btn danger sm">Excluir</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state">Nenhum tipo cadastrado.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

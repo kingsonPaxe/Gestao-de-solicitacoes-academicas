@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if editar else 'Nova' }} Solicitação{% endblock %}
+{% block navbar_title %}{{ 'Editar' if editar else 'Nova' }} Solicitação{% endblock %}
+{% block content %}
+<h1 class="page-title">{{ 'Editar' if editar else 'Nova' }} Solicitação</h1>
+<div class="card">
+  <form method="post" class="form">
+    {{ form.hidden_tag() }}
+    <div class="form-row">
+      {{ form.tipo_id.label }}
+      {{ form.tipo_id() }}
+      {% for e in form.tipo_id.errors %}<span class="error">{{ e }}</span>{% endfor %}
+    </div>
+    <div class="form-row">
+      {{ form.descricao.label }}
+      {{ form.descricao(placeholder="Descreva sua solicitação...") }}
+      {% for e in form.descricao.errors %}<span class="error">{{ e }}</span>{% endfor %}
+    </div>
+    <div class="flex">
+      {{ form.submit(class="btn primary") }}
+      <a href="{{ url_for('aluno.listar') }}" class="btn secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

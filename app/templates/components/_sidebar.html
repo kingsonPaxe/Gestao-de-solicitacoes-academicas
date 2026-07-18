@@ -1,0 +1,38 @@
+<aside class="sidebar">
+  <div class="brand">Solicitações</div>
+  <nav>
+  {% if current_user.is_authenticated %}
+    {% if current_user.is_admin %}
+      <a href="{{ url_for('admin.dashboard') }}" class="{{ 'active' if request.endpoint == 'admin.dashboard' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="{{ url_for('admin.listar') }}" class="{{ 'active' if request.endpoint == 'admin.listar' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <span>Solicitações</span>
+      </a>
+      <a href="{{ url_for('admin.alunos') }}" class="{{ 'active' if request.endpoint == 'admin.alunos' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+        <span>Alunos</span>
+      </a>
+      <a href="{{ url_for('admin.tipos') }}" class="{{ 'active' if request.endpoint == 'admin.tipos' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v4H4zM4 12h16v4H4zM4 20h10"/></svg>
+        <span>Tipos</span>
+      </a>
+    {% else %}
+      <a href="{{ url_for('aluno.dashboard') }}" class="{{ 'active' if request.endpoint == 'aluno.dashboard' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+        <span>Dashboard</span>
+      </a>
+      <a href="{{ url_for('aluno.listar') }}" class="{{ 'active' if request.endpoint == 'aluno.listar' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <span>Minhas Solicitações</span>
+      </a>
+      <a href="{{ url_for('aluno.nova') }}" class="{{ 'active' if request.endpoint == 'aluno.nova' }}">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        <span>Nova Solicitação</span>
+      </a>
+    {% endif %}
+  {% endif %}
+  </nav>
+</aside>

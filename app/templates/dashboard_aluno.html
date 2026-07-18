@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% from "components/_badge.html" import status_badge %}
+{% block title %}Dashboard - Aluno{% endblock %}
+{% block navbar_title %}Painel do Aluno{% endblock %}
+{% block content %}
+<h1 class="page-title">Bem-vindo(a), {{ current_user.nome }}</h1>
+
+<div class="grid grid-4 mb-2">
+  <div class="card stat primary"><div class="label">Total</div><div class="value">{{ stats.total }}</div></div>
+  <div class="card stat warning"><div class="label">Pendentes</div><div class="value">{{ stats.pendentes }}</div></div>
+  <div class="card stat"><div class="label">Em análise</div><div class="value">{{ stats.em_analise }}</div></div>
+  <div class="card stat success"><div class="label">Concluídas</div><div class="value">{{ stats.concluidas }}</div></div>
+</div>
+
+<div class="card">
+  <div class="flex mb-2" style="justify-content:space-between">
+    <h3 style="margin:0">Últimas solicitações</h3>
+    <a href="{{ url_for('aluno.nova') }}" class="btn primary sm">+ Nova</a>
+  </div>
+  {% if ultimas %}
+    <table class="data">
+      <thead><tr><th>#</th><th>Tipo</th><th>Status</th><th>Data</th><th></th></tr></thead>
+      <tbody>
+      {% for s in ultimas %}
+        <tr>
+          <td>#{{ s.id }}</td>
+          <td>{{ s.tipo.nome }}</td>
+          <td>{{ status_badge(s.status) }}</td>
+          <td>{{ s.data_abertura.strftime('%d/%m/%Y %H:%M') }}</td>
+          <td><a href="{{ url_for('aluno.detalhes', sid=s.id) }}" class="btn secondary sm">Detalhes</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty-state">Você ainda não tem solicitações.</div>
+  {% endif %}
+</div>
+{% endblock %}

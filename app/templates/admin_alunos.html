@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block title %}Alunos{% endblock %}
+{% block navbar_title %}Alunos{% endblock %}
+{% block content %}
+<div class="flex mb-2" style="justify-content:space-between">
+  <h1 class="page-title" style="margin:0">Alunos</h1>
+  <a href="{{ url_for('admin.novo_aluno') }}" class="btn primary">+ Novo aluno</a>
+</div>
+
+<form method="get" class="toolbar">
+  <input type="text" name="q" value="{{ search or '' }}" placeholder="Buscar por nome ou e-mail...">
+  <button class="btn primary sm" type="submit">Buscar</button>
+</form>
+
+<div class="card" style="padding:0">
+  {% if itens %}
+  <table class="data">
+    <thead><tr><th>Nome</th><th>E-mail</th><th>Curso</th><th>Criado em</th><th></th></tr></thead>
+    <tbody>
+    {% for u in itens %}
+      <tr>
+        <td>{{ u.nome }}</td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.curso or '—' }}</td>
+        <td>{{ u.data_criacao.strftime('%d/%m/%Y') }}</td>
+        <td class="flex">
+          <a class="btn secondary sm" href="{{ url_for('admin.editar_aluno', uid=u.id) }}">Editar</a>
+          <form method="post" action="{{ url_for('admin.excluir_aluno', uid=u.id) }}"
+                data-confirm="Excluir aluno {{ u.nome }}?" style="display:inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn danger sm">Excluir</button>
+          </form>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty-state">Nenhum aluno encontrado.</div>
+  {% endif %}
+</div>
+{% endblock %}

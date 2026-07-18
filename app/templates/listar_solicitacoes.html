@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% from "components/_badge.html" import status_badge %}
+{% block title %}Solicitações{% endblock %}
+{% block navbar_title %}Solicitações{% endblock %}
+{% block content %}
+<h1 class="page-title">Solicitações</h1>
+
+<form method="get" class="toolbar">
+  <input type="text" name="q" value="{{ search or '' }}"
+         placeholder="{{ 'Buscar aluno...' if is_admin else 'Buscar na descrição...' }}">
+  <select name="status">
+    <option value="">Todos os status</option>
+    {% for st in statuses %}
+      <option value="{{ st }}" {% if status_atual == st %}selected{% endif %}>{{ st }}</option>
+    {% endfor %}
+  </select>
+  {% if is_admin %}
+  <select name="tipo_id">
+    <option value="">Todos os tipos</option>
+    {% for t in tipos %}
+      <option value="{{ t.id }}" {% if tipo_atual == t.id %}selected{% endif %}>{{ t.nome }}</option>
+    {% endfor %}
+  </select>
+  {% endif %}
+  <button class="btn primary sm" type="submit">Filtrar</button>
+  <div class="spacer"></div>
+  {% if not is_admin %}
+    <a href="{{ url_for('aluno.nova') }}" class="btn primary">+ Nova solicitação</a>
+  {% endif %}
+</form>
+
+<div class="card" style="padding:0">
+  {% if itens %}
+  <table class="data">
+    <thead>
+      <tr>
+        <th>#</th>
+        {% if is_admin %}<th>Aluno</th>{% endif %}
+        <th>Tipo</th><th>Status</th><th>Aberta em</th><th>Última atualização</th><th></th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for s in itens %}
+      <tr>
+        <td>#{{ s.id }}</td>
+        {% if is_admin %}<td>{{ s.usuario.nome }}<br><small class="muted">{{ s.usuario.email }}</small></td>{% endif %}
+        <td>{{ s.tipo.nome }}</td>
+        <td>{{ status_badge(s.status) }}</td>
+        <td>{{ s.data_abertura.strftime('%d/%m/%Y %H:%M') }}</td>
+        <td>{{ s.ultima_atualizacao.strftime('%d/%m/%Y %H:%M') }}</td>
+        <td>
+          <a href="{{ url_for('admin.detalhes' if is_admin else 'aluno.detalhes', sid=s.id) }}"
+             class="btn secondary sm">Ver</a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+    <div class="empty-state">Nenhuma solicitação encontrada.</div>
+  {% endif %}
+</div>
+{% endblock %}

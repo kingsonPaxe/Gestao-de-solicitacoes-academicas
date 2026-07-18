@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% from "components/_badge.html" import status_badge %}
+{% block title %}Solicitação #{{ s.id }}{% endblock %}
+{% block navbar_title %}Solicitação #{{ s.id }}{% endblock %}
+{% block content %}
+<div class="flex mb-2" style="justify-content:space-between">
+  <h1 class="page-title" style="margin:0">Solicitação #{{ s.id }}</h1>
+  {{ status_badge(s.status) }}
+</div>
+
+<div class="grid grid-2">
+  <div class="card">
+    <h3 style="margin-top:0">Dados</h3>
+    <p><strong>Aluno:</strong> {{ s.usuario.nome }} ({{ s.usuario.email }})</p>
+    <p><strong>Curso:</strong> {{ s.usuario.curso or '—' }}</p>
+    <p><strong>Tipo:</strong> {{ s.tipo.nome }}</p>
+    <p><strong>Aberta em:</strong> {{ s.data_abertura.strftime('%d/%m/%Y %H:%M') }}</p>
+    <p><strong>Última atualização:</strong> {{ s.ultima_atualizacao.strftime('%d/%m/%Y %H:%M') }}</p>
+    <p><strong>Descrição:</strong></p>
+    <p class="muted" style="white-space:pre-wrap">{{ s.descricao }}</p>
+    {% if s.arquivo %}
+      <a class="btn secondary sm" href="{{ url_for('admin.download' if is_admin else 'aluno.download', sid=s.id) }}">
+        📄 Baixar documento
+      </a>
+    {% endif %}
+
+    {% if not is_admin and s.status == 'Recebida' %}
+      <div class="mt-2 flex">
+        <a href="{{ url_for('aluno.editar', sid=s.id) }}" class="btn secondary sm">Editar</a>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="card">
+    <h3 style="margin-top:0">Histórico</h3>
+    <div class="timeline">
+      {% for h in s.historico %}
+        <div class="timeline-item">
+          <div class="meta">{{ h.data.strftime('%d/%m/%Y %H:%M') }} · {{ h.usuario_responsavel or '—' }}</div>
+          <div class="status">{{ h.status }}</div>
+          {% if h.observacao %}<div class="obs">{{ h.observacao }}</div>{% endif %}
+        </div>
+      {% else %}
+        <div class="muted">Sem histórico ainda.</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% if is_admin %}
+<div class="card mt-2">
+  <h3 style="margin-top:0">Atualizar solicitação</h3>
+  <form method="post" enctype="multipart/form-data" class="form wide">
+    {{ form.hidden_tag() }}
+    <div class="grid grid-2">
+      <div class="form-row">
+        {{ form.status.label }}
+        {{ form.status() }}
+      </div>
+      <div class="form-row">
+        {{ form.arquivo.label }}
+        {{ form.arquivo() }}
+        {% for e in form.arquivo.errors %}<span class="error">{{ e }}</span>{% endfor %}
+      </div>
+    </div>
+    <div class="form-row">
+      {{ form.observacao.label }}
+      {{ form.observacao(placeholder="Observação para o histórico...") }}
+    </div>
+    <div class="flex">
+      {{ form.submit(class="btn primary") }}
+      <form method="post" action="{{ url_for('admin.excluir_solicitacao', sid=s.id) }}"
+            data-confirm="Excluir esta solicitação?" style="display:inline">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button class="btn danger" type="submit">Excluir</button>
+      </form>
+    </div>
+  </form>
+</div>
+{% endif %}
+{% endblock %}

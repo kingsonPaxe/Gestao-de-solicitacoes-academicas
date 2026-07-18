@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Solicitações Acadêmicas{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  {% block body %}
+  <div class="app">
+    {% include "components/_sidebar.html" %}
+    <div class="main">
+      {% include "components/_navbar.html" %}
+      <div class="content">
+        {% include "components/_flash.html" %}
+        {% block content %}{% endblock %}
+      </div>
+    </div>
+  </div>
+  {% endblock %}
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

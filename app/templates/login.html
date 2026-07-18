@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}Login - Solicitações Acadêmicas{% endblock %}
+{% block body %}
+<div class="login-wrapper">
+  <div class="login-card">
+    <h1>Solicitações Acadêmicas</h1>
+    <p class="subtitle">Faça login para continuar</p>
+    {% include "components/_flash.html" %}
+    <form method="post" class="form">
+      {{ form.hidden_tag() }}
+      <div class="form-row">
+        {{ form.email.label }}
+        {{ form.email(placeholder="seu@email.com") }}
+        {% for e in form.email.errors %}<span class="error">{{ e }}</span>{% endfor %}
+      </div>
+      <div class="form-row">
+        {{ form.senha.label }}
+        {{ form.senha(placeholder="••••••") }}
+        {% for e in form.senha.errors %}<span class="error">{{ e }}</span>{% endfor %}
+      </div>
+      {{ form.submit(class="btn primary") }}
+    </form>
+    <p class="muted mt-2" style="font-size:12px">
+      Demo admin: <strong>admin@imetro.ao</strong> / <strong>123456</strong>
+    </p>
+  </div>
+</div>
+{% endblock %}

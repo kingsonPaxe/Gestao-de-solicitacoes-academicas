@@ -1,0 +1,11 @@
+<div class="navbar">
+  <div>
+    <strong>{% block navbar_title %}{% endblock %}</strong>
+  </div>
+  {% if current_user.is_authenticated %}
+  <div class="user">
+    <span>Olá, <strong>{{ current_user.nome }}</strong></span>
+    <a class="btn secondary sm" href="{{ url_for('auth.logout') }}">Sair</a>
+  </div>
+  {% endif %}
+</div>

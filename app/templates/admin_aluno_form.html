@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if editar else 'Novo' }} Aluno{% endblock %}
+{% block navbar_title %}{{ 'Editar' if editar else 'Novo' }} Aluno{% endblock %}
+{% block content %}
+<h1 class="page-title">{{ 'Editar' if editar else 'Novo' }} Aluno</h1>
+<div class="card">
+  <form method="post" class="form">
+    {{ form.hidden_tag() }}
+    <div class="form-row">{{ form.nome.label }} {{ form.nome() }}
+      {% for e in form.nome.errors %}<span class="error">{{ e }}</span>{% endfor %}</div>
+    <div class="form-row">{{ form.email.label }} {{ form.email() }}
+      {% for e in form.email.errors %}<span class="error">{{ e }}</span>{% endfor %}</div>
+    <div class="form-row">{{ form.curso.label }} {{ form.curso() }}</div>
+    <div class="form-row">
+      {{ form.senha.label }} {{ form.senha(placeholder='Deixe em branco para manter' if editar else '') }}
+      {% for e in form.senha.errors %}<span class="error">{{ e }}</span>{% endfor %}
+    </div>
+    <div class="flex">
+      {{ form.submit(class="btn primary") }}
+      <a href="{{ url_for('admin.alunos') }}" class="btn secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

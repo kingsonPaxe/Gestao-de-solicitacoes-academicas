@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% from "components/_badge.html" import status_badge %}
+{% block title %}Dashboard - Admin{% endblock %}
+{% block navbar_title %}Painel Administrativo{% endblock %}
+{% block content %}
+<h1 class="page-title">Visão geral</h1>
+
+<div class="grid grid-4 mb-2">
+  <div class="card stat primary"><div class="label">Total de solicitações</div><div class="value">{{ stats.total }}</div></div>
+  <div class="card stat"><div class="label">Alunos</div><div class="value">{{ stats.alunos }}</div></div>
+  <div class="card stat warning"><div class="label">Pendentes</div><div class="value">{{ stats.pendentes }}</div></div>
+  <div class="card stat success"><div class="label">Concluídas</div><div class="value">{{ stats.concluidas }}</div></div>
+</div>
+
+<div class="grid grid-2 mb-2">
+  <div class="card">
+    <h3 style="margin-top:0">Por status</h3>
+    <div class="chart-bar">
+      {% set max_status = (por_status.values()|list|max) if por_status else 1 %}
+      {% for st in statuses %}
+        {% set c = por_status.get(st, 0) %}
+        <div class="row">
+          <div class="name">{{ st }}</div>
+          <div class="bar" style="width: {{ (c / (max_status or 1) * 100)|round }}%"></div>
+          <div class="count">{{ c }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="margin-top:0">Por tipo</h3>
+    <div class="chart-bar">
+      {% set max_tipo = (por_tipo|map(attribute=1)|list|max) if por_tipo else 1 %}
+      {% for nome, c in por_tipo %}
+        <div class="row">
+          <div class="name">{{ nome }}</div>
+          <div class="bar" style="width: {{ (c / (max_tipo or 1) * 100)|round }}%"></div>
+          <div class="count">{{ c }}</div>
+        </div>
+      {% else %}
+        <div class="empty-state">Sem dados.</div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <h3 style="margin-top:0">Últimas solicitações</h3>
+  {% if ultimas %}
+    <table class="data">
+      <thead><tr><th>#</th><th>Aluno</th><th>Tipo</th><th>Status</th><th>Data</th><th></th></tr></thead>
+      <tbody>
+      {% for s in ultimas %}
+        <tr>
+          <td>#{{ s.id }}</td>
+          <td>{{ s.usuario.nome }}</td>
+          <td>{{ s.tipo.nome }}</td>
+          <td>{{ status_badge(s.status) }}</td>
+          <td>{{ s.data_abertura.strftime('%d/%m/%Y %H:%M') }}</td>
+          <td><a href="{{ url_for('admin.detalhes', sid=s.id) }}" class="btn secondary sm">Ver</a></td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <div class="empty-state">Nenhuma solicitação ainda.</div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,4 @@
+{% macro status_badge(status) -%}
+  {%- set slug = status|lower|replace(' ', '-')|replace('á','a')|replace('ã','a')|replace('í','i')|replace('ó','o')|replace('é','e')|replace('ç','c') -%}
+  <span class="badge badge-{{ slug }}">{{ status }}</span>
+{%- endmacro %}
