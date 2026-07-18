@@ -186,9 +186,13 @@ table.data tr:hover td { background: #f8fafc; }
 /* Login */
 .login-wrapper {
   min-height: 100vh; display: flex; align-items: center; justify-content: center;
-  background:
+  background-color: #f5b301;
+  background-image:
     linear-gradient(120deg, rgba(245, 158, 11, 0.9) 0%, rgba(253, 230, 138, 0.8) 45%, rgba(120, 53, 15, 0.78) 100%),
-    url('../images/collega.jpg') center/cover no-repeat;
+    url('/static/images/colega.jpg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   padding: 20px;
 }
 .login-card {
